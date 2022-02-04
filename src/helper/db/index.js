@@ -1,37 +1,68 @@
+const mongoose = require("mongoose");
 const logger = require("../../log/server");
 const config = require("../../config");
-const { Sequelize } = require("sequelize");
 
-// Create Connection With SQL-database
+//............. DB MODELS.............................
 
-const DB_URI = config.db.URI || null;
+// Create the database connection
+
+const DB_URI = config.db.URI;
 const DB_USER = config.db.USER || null;
 const DB_PASSWORD = config.db.PASSWORD || null;
-const DB_NAME = config.db.NAME || null;
-const DB_HOST = config.db.HOST || null;
-const DB_DIALECT = config.db.DIALECT || null;
 
-// Option 3: Passing parameters separately (other dialects)
-const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-  host: DB_HOST,
-  dialect: DB_DIALECT,
-});
-
-const connectDB = async (req, res, next) => {
+const connectDB = async () => {
   try {
-    await sequelize.authenticate();
-    logger.info({
-      message: `Connection been established successfully`,
-      timestamp: `${new Date().toString()}`,
+    await mongoose.connect(DB_URI, {
+      user: DB_USER,
+      pass: DB_PASSWORD,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
-  } catch (error) {
+  } catch (err) {
     logger.error({
-      message: error,
+      //     message: `${err.message}`,
       timestamp: `${new Date().toString()}`,
     });
   }
-
-  next();
 };
+
+// CONNECTION EVENTS
+// When successfully connected
+mongoose.connection.on("connected", () => {
+  logger.info({
+    message: "Mongoose default connection is open",
+    timestamp: `${new Date().toString()}`,
+  });
+});
+
+// If the connection throws an error
+mongoose.connection.on("error", (err) => {
+  logger.error({
+    message: "Mongoose default connection error: " + err,
+    timestamp: `${new Date().toString()}`,
+  });
+});
+
+// When the connection is disconnected
+mongoose.connection.on("disconnected", () => {
+  logger.info({
+    message: "Mongoose default connection disconnected",
+    timestamp: `${new Date().toString()}`,
+  });
+});
+
+// If the Node process ends, close the Mongoose connection
+process.on("SIGINT", () => {
+  mongoose.connection.close(() => {
+    logger.info({
+      message:
+        "Mongoose default connection disconnected through app termination",
+      timestamp: `${new Date().toString()}`,
+    });
+    process.exit(0);
+  });
+});
+
+//..............Central access point to all db models.....................
 
 module.exports = { connectDB };

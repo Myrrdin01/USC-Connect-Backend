@@ -1,5 +1,3 @@
-const model = "DB";
+const Event = require("./models/events");
 
-//https://stackoverflow.com/questions/63611772/sequelize-does-not-creating-a-table-shows-this-result-executing-default-se
-
-module.exports = { model };
+module.exports = { Event };

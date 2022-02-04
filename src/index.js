@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const helmet = require("helmet");
 const path = require("path");
+const httpLogger = require("./log/http");
 
 const config = require("./config");
 const { jsonParser, urlencodedParser } = require("./middlewares/body-parser");
@@ -15,6 +16,7 @@ module.exports = async function entryPoint(io, app) {
   app.use(helmet());
   app.use(urlencodedParser);
   app.use(jsonParser);
+  app.use(httpLogger);
   app.use("/api", router);
   app.use(
     "/container",

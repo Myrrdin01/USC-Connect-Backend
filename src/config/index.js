@@ -49,8 +49,6 @@ const variables = {
     USER: ENV.DB_USER,
     PASSWORD: ENV.DB_PASSWORD,
     NAME: ENV.DB_NAME,
-    HOST: ENV.DB_HOST || "localhost",
-    DIALECT: ENV.DB_DIALECT || "mysql",
   },
 
   email: {

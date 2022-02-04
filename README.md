@@ -1,6 +1,8 @@
 # Welcome to USC Connect's REST API
 
-Hello, here in this Readme file we will explain how to use this [Node.js](https://nodejs.org/en/) Web Application.
+Hello, here in this Readme file we will explain how to use this [Node.js](https://nodejs.org/en/) Server.
+
+[API URL](https://usc-connect-api.herokuapp.com/) For making requests.
 
 ## Step 1
 
@@ -17,18 +19,33 @@ The script above will download all the current libraries (modules) that are used
 
 ## Step 2
 
-### Adding a MySQL database
+### Adding a MongoDB database
 
-We cannot connect without a database. USC Connect uses MySQL as our database. Create a MySQL database, and take note of the password, name, and user.
+We need to connect to a mongoDB database to utilize the API's resources.
 
 ```javascript
-const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-  host: DB_HOST,
-  dialect: DB_DIALECT,
-});
+const DB_URI = config.db.URI;
+const DB_USER = config.db.USER || null;
+const DB_PASSWORD = config.db.PASSWORD || null;
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(DB_URI, {
+      user: DB_USER,
+      pass: DB_PASSWORD,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+  } catch (err) {
+    logger.error({
+      //     message: `${err.message}`,
+      timestamp: `${new Date().toString()}`,
+    });
+  }
+};
 ```
 
-Now this may seem complicated, however, below we have code to connect to our MySQL database. To run our application it is important to understand how this aspect of it works. Simply all that is needed is to add environment variables to the root of the project. This means we need to create a .env file with the database information needed. Within the root you will see a .example.env file. This has all the variables that need to be filled to run our application. In the .env file enter the name of the database, password and user.
+The code above is what is used to connect to MongoDB using Mongoose.
 
 ```.env
 DB_USER = USER_FOR_YOUR_DATABASE
