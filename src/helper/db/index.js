@@ -20,8 +20,8 @@ const connectDB = async () => {
     });
   } catch (err) {
     logger.error({
-      //     message: `${err.message}`,
       timestamp: `${new Date().toString()}`,
+      message: `${err.message}`,
     });
   }
 };
@@ -30,24 +30,24 @@ const connectDB = async () => {
 // When successfully connected
 mongoose.connection.on("connected", () => {
   logger.info({
-    message: "Mongoose default connection is open",
     timestamp: `${new Date().toString()}`,
+    message: "Mongoose default connection is open",
   });
 });
 
 // If the connection throws an error
 mongoose.connection.on("error", (err) => {
   logger.error({
-    message: "Mongoose default connection error: " + err,
     timestamp: `${new Date().toString()}`,
+    message: "Mongoose default connection error: " + err,
   });
 });
 
 // When the connection is disconnected
 mongoose.connection.on("disconnected", () => {
   logger.info({
-    message: "Mongoose default connection disconnected",
     timestamp: `${new Date().toString()}`,
+    message: "Mongoose default connection disconnected",
   });
 });
 
@@ -55,9 +55,9 @@ mongoose.connection.on("disconnected", () => {
 process.on("SIGINT", () => {
   mongoose.connection.close(() => {
     logger.info({
+      timestamp: `${new Date().toString()}`,
       message:
         "Mongoose default connection disconnected through app termination",
-      timestamp: `${new Date().toString()}`,
     });
     process.exit(0);
   });

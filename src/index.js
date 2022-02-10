@@ -1,34 +1,37 @@
+const websocketHandler = require("./server/websocket");
+const httpHandler = require("./server/http");
+const { corsOrigins } = require("./middlewares/cors");
+const { connectDB } = require("./helper/db");
+
 const express = require("express");
+const cors = require("cors");
 const http = require("http");
-const helmet = require("helmet");
-const path = require("path");
-const httpLogger = require("./log/http");
 
-const config = require("./config");
-const { jsonParser, urlencodedParser } = require("./middlewares/body-parser");
-const { router, websockets } = require("./controller");
-const errorHandler = require("./middlewares/error-handler");
+const app = express();
+const httpServer = http.createServer(app);
 
-module.exports = async function entryPoint(io, app) {
-  //require("./auth/passport");
+connectDB();
 
-  //app.use(passport.initialize());
-  app.use(helmet());
-  app.use(urlencodedParser);
-  app.use(jsonParser);
-  app.use(httpLogger);
-  app.use("/api", router);
-  app.use(
-    "/container",
-    express.static(
-      path.join(__dirname, `../${config.resources.CONTAINER_PATH}`)
-    )
-  );
-  app.use("*", (req, res, next) => {
-    next({ name: "NotFound", message: "Resource Not Found" });
+module.exports = async function entry() {
+  const corsURLs = await corsOrigins.origin;
+
+  // Setup cors
+
+  const io = require("socket.io")(httpServer, {
+    cors: {
+      origins: corsURLs,
+    },
   });
-  app.use(errorHandler);
 
-  //io.use(wrapper(passport.initialize()));
-  websockets(io);
+  app.use(
+    cors({
+      origin: corsURLs,
+      optionSuccessStatus: 200,
+    })
+  );
+
+  // Entry For Both Websocket and HTTP aspect of project
+
+  websocketHandler(io);
+  httpHandler(app, express, io);
 };
