@@ -15,12 +15,13 @@ test("Should [datePresentation] return reasonable error", () => {
   // Testing null / no input
 
   expect(result.day).toBe("00");
-  expect(result.month).toBe("00");
+  expect(result.month).toBe("----");
   expect(result.day_nth).toBe("00");
   expect(result.year).toBe("0000");
   expect(result.hour).toBe("00");
   expect(result.min).toBe("00");
   expect(result.sec).toBe("00");
+  expect(result.day_name).toBe("----");
   expect(result.amOrpm).toBe("");
 });
 
@@ -33,6 +34,7 @@ test("Should [datePresentation] output human readable date", () => {
   expect(result.month).toBe("February");
   expect(result.day).toBe("11");
   expect(result.day_nth).toBe("11th");
+  expect(result.day_name).toBe("Friday");
   expect(result.year).toBe("2022");
   expect(result.hour).toBe("9");
   expect(result.min).toBe("59");

@@ -1,15 +1,14 @@
 const mongoose = require("mongoose");
 
-const EventSchema = new mongoose.Schema({
+const ResourceSchema = new mongoose.Schema({
   name: { type: String, required: [true, "Enter Event Name"], unique: false },
-  date: { type: Date },
-  location: { type: String },
+  description: { type: Date },
+  department: { type: String },
   description: { type: String },
-  campus_name: { type: String },
   more_details: {},
   created_by: { type: String }, // Admin ID
 });
 
-const Event = mongoose.model("Events", EventSchema);
+const Resource = mongoose.model("Resources", ResourceSchema);
 
-module.exports = Event;
+module.exports = Resource;

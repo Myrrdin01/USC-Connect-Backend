@@ -7,24 +7,32 @@ module.exports = {
 };
 
 async function getAll({ page_size, page_number }) {
-  let resources = [];
+  let events = [];
   page_size = parseInt(page_size, 10);
   page_number = parseInt(page_number, 10);
 
-  return resources;
+  return events;
 }
 
 async function getOneById(id) {
-  let resource = {};
+  let event = {};
 
-  return resource;
+  return event;
 }
 
 async function create(details) {
-  let resource;
-  const { date, location, description, title } = details;
+  let event;
+  const {
+    name,
+    date,
+    location,
+    description,
+    campus_name,
+    created_by,
+    more_details,
+  } = details;
 
-  return resource;
+  return event;
 }
 
 async function _delete(id) {
