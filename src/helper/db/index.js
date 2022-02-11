@@ -63,6 +63,4 @@ process.on("SIGINT", () => {
   });
 });
 
-//..............Central access point to all db models.....................
-
 module.exports = { connectDB };
