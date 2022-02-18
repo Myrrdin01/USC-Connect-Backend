@@ -15,12 +15,13 @@ const router = express.Router();
 // Controllers
 
 const exampleController = require("./controllers/example");
+const eventController = require("./controllers/event");
 
 // Use call feature for passing io because this will seperate HTTP from Websockets
 
 function controllerHandler() {
   const io = this.io;
-  router.use(exampleController(io));
+  router.use(exampleController(io), eventController(io));
 
   return router;
 }

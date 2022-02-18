@@ -7,7 +7,11 @@ module.exports = {
 };
 
 async function getAll({ page_size, page_number }) {
-  let events = [];
+  let events = [
+    { name: "Prayers", description: "This event is tomorrow" },
+    { name: "Event 2", description: "This event was yesterday" },
+    { name: "Event 3", description: "Hello World! Coding Marathon" },
+  ];
   page_size = parseInt(page_size, 10);
   page_number = parseInt(page_number, 10);
 
