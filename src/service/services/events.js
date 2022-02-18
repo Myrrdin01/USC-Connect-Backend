@@ -1,3 +1,5 @@
+const { Event } = require("../../model");
+
 module.exports = {
   getAll,
   getOneById,
@@ -7,13 +9,29 @@ module.exports = {
 };
 
 async function getAll({ page_size, page_number }) {
-  let events = [
-    { name: "Prayers", description: "This event is tomorrow" },
-    { name: "Event 2", description: "This event was yesterday" },
-    { name: "Event 3", description: "Hello World! Coding Marathon" },
-  ];
+  let events = [];
   page_size = parseInt(page_size, 10);
   page_number = parseInt(page_number, 10);
+  const page = Math.max(0, page_number);
+  const date = new Date();
+
+  /*
+
+  Get events that didn't pass
+
+  date: { $gte: date.toISOString() }
+
+  */
+
+  if (page_size > 20) {
+    //Limit size
+    page_size = 20;
+  }
+
+  events = await Event.find({})
+    .limit(page_size)
+    .skip(page_size * page)
+    .sort({ date: 1 });
 
   return events;
 }
