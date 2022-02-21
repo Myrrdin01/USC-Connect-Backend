@@ -63,4 +63,4 @@ process.on("SIGINT", () => {
   });
 });
 
-module.exports = { connectDB };
+module.exports = connectDB;

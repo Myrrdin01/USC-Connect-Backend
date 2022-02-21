@@ -1,7 +1,4 @@
-const websocketHandler = require("./server/websocket");
-const httpHandler = require("./server/http");
 const { corsOrigins } = require("./middlewares/cors");
-const { connectDB } = require("./helper/db");
 
 const express = require("express");
 const cors = require("cors");
@@ -10,7 +7,7 @@ const http = require("http");
 const app = express();
 const httpServer = http.createServer(app);
 
-connectDB();
+require("./helper/db")(); //Run Code Immediately
 
 module.exports = async function entry() {
   const corsURLs = await corsOrigins.origin;
@@ -32,6 +29,6 @@ module.exports = async function entry() {
 
   // Entry For Both Websocket and HTTP aspect of project
 
-  websocketHandler(io);
-  httpHandler(app, express, io);
+  require("./server/websocket")(io);
+  require("./server/http")(app, express, io);
 };
